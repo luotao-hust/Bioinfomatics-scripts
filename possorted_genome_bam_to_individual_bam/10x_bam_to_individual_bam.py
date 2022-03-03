@@ -1,4 +1,6 @@
 ### Python 3.6.13
+### Using the Python dictionary type to store tmp file
+
 import os
 import pysam
 import time
