@@ -32,4 +32,4 @@ def main(input_bam,barcodes_file,output_dir):
         
 if __name__ == "__main__":
     main(input_bam=sys.argv[1],barcodes_file=sys.argv[2],output_dir=sys.argv[3])
-# python split_bc_bam_memory_cost.py /workspace/luot/data/EV_data/data/cellranger_out/100K5M/outs/possorted_genome_bam.bam /workspace/luot/EV/QC/mapping_rates/K562_100_EV_barcode_list.txt  /workspace/luot/EV/QC/mapping_rates/K562_100_EV
+# ulimit -HSn 1024000 && python split_bc_bam_memory_cost.py /workspace/luot/data/EV_data/data/cellranger_out/100K5M/outs/possorted_genome_bam.bam /workspace/luot/EV/QC/mapping_rates/K562_100_EV_barcode_list.txt  /workspace/luot/EV/QC/mapping_rates/K562_100_EV
