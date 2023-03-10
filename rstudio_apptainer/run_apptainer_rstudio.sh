@@ -1,5 +1,50 @@
 #!/bin/bash
 # VERSION=1.0.1
+export TOP_PID=$$
+trap 'exit 1' TERM
+
+
+# 用于检测更新
+FileName=$(basename $0)
+basedir=`cd $(dirname $0); pwd -P`
+
+export NEW_STARTSCRIPT="/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
+export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/rstudio_apptainer/run_apptainer_rstudio.sh"
+
+wget -q --timeout=6 --tries=2 ${NEW_STARTSCRIPT_PATH} -O ${NEW_STARTSCRIPT}
+NEW_VERSION=`sed -n '2p' ${NEW_STARTSCRIPT} | awk -F "=" '{print $2}'`
+CURRENT_VERSION=`sed -n '2p' "${basedir}/${FileName}" | awk -F "=" '{print $2}'`
+
+### update startscript
+if [[ "${CURRENT_VERSION}" == "${NEW_VERSION}" ]]; then
+    :
+fi
+if [[ "$(printf '%s\n' "${CURRENT_VERSION}" "${NEW_VERSION}" | sort -rV | head -n1)" != "${CURRENT_VERSION}" ]]; then
+    while true
+        do
+            echo -e "\e[31mWarning: \e[0m New version is available!"
+            read -r -p "Current version = ${CURRENT_VERSION} , new version = ${NEW_VERSION}; Do you want to update it (y/n)? " input
+            case $input in
+                [yY][eE][sS]|[yY])
+                    mv ${basedir}/${FileName} "/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_bk.sh"
+                    cp ${NEW_STARTSCRIPT} ${basedir}/${FileName}
+                    echo -e "\033[34mINFO:\033[0m  Finishing script update, please restart this script!"
+                    kill -s TERM $TOP_PID
+                    ;;
+
+                [nN][oO]|[nN])
+                    break
+                    ;;
+
+                *)
+                    echo -e "\e[31m Warning: \e[0m Invalid input..."
+                    sleep 3
+                    ;;
+            esac
+        done
+fi
+
+# 用于检测更新
 
 while getopts ":b:p:" arg;
     do
@@ -68,6 +113,8 @@ else
 	echo
 	export APPTAINERENV_PASSWORD=${password}
 fi
-
-
-apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
+    
+echo ${CURRENT_VERSION}
+echo ${NEW_VERSION}
+echo ${APPTAINER_BIND}
+# apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
