@@ -117,8 +117,5 @@ else
 	echo
 	export APPTAINERENV_PASSWORD=${password}
 fi
-    
-echo ${CURRENT_VERSION}
-echo ${NEW_VERSION}
-echo ${APPTAINER_BIND}
-# apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
+
+apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
