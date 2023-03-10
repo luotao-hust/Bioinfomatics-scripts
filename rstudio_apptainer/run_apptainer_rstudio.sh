@@ -23,6 +23,7 @@ while getopts ":b:p:" arg;
 # 用于检测更新
 FileName=$(basename $0)
 basedir=`cd $(dirname $0); pwd -P`
+mkdir -p "/home/$(id -un)/.config/rstudio_apptainer"
 
 export NEW_STARTSCRIPT="/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
 export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/rstudio_apptainer/run_apptainer_rstudio.sh"
@@ -109,10 +110,23 @@ PASSWORD_FILE="/home/${APPTAINERENV_USER}/.config/rstudio_apptainer/passwd"
 if [ -f "$PASSWORD_FILE" ]; then
     export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
 else
-    mkdir -p "/home/${APPTAINERENV_USER}/.config/rstudio_apptainer"
-	read  -s  -p "Please input an new password for rstudio server:" passwd_input
+   
+	while true
+		do
+			read  -s  -p "Please input an new password for rstudio server: " passwd_input
+			echo
+			read  -s  -p "Verify password: " passwd_va
+			echo
+			if [[ ${passwd_va} == ${passwd_input} ]]; 
+			then
+				break
+			else
+				echo -e "\e[31mWarning: \e[0m The passwords do not match!"
+				sleep 3
+			fi
+		done
 	password=`echo -n ${passwd_input} | openssl dgst -sha256`
-    password=${password: -64}
+	password=${password: -64}
 	echo ${password} > ${PASSWORD_FILE}
 	echo
 	export APPTAINERENV_PASSWORD=${password}
