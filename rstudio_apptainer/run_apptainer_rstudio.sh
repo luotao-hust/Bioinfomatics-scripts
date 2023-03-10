@@ -3,6 +3,22 @@
 export TOP_PID=$$
 trap 'exit 1' TERM
 
+while getopts ":b:p:" arg;
+    do
+        case $arg in
+             b)
+                EXBIND=$(python -c 'print(",".join([i+":"+i for i in "'$OPTARG'".split(",") ]))')
+		RAW_BIND=$OPTARG
+                        ;;
+             p)
+                PORT=$OPTARG
+                ;;
+             ?)
+                echo "Invalid option: -$OPTARG"
+                exit 1
+                ;;
+        esac
+    done
 
 # 用于检测更新
 FileName=$(basename $0)
@@ -28,7 +44,9 @@ if [[ "$(printf '%s\n' "${CURRENT_VERSION}" "${NEW_VERSION}" | sort -rV | head -
                 [yY][eE][sS]|[yY])
                     mv ${basedir}/${FileName} "/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_bk.sh"
                     cp ${NEW_STARTSCRIPT} ${basedir}/${FileName}
-                    echo -e "\033[34mINFO:\033[0m  Finishing script update, please restart this script!"
+		    chmod 755 ${basedir}/${FileName}
+		    bash ${basedir}/${FileName} -p ${PORT} -b ${RAW_BIND}
+                    echo -e "\033[34mINFO:\033[0m  Finishing script update."
                     kill -s TERM $TOP_PID
                     ;;
 
@@ -46,21 +64,7 @@ fi
 
 # 用于检测更新
 
-while getopts ":b:p:" arg;
-    do
-        case $arg in
-             b)
-                EXBIND=$(python -c 'print(",".join([i+":"+i for i in "'$OPTARG'".split(",") ]))')
-                        ;;
-             p)
-                PORT=$OPTARG
-                ;;
-             ?)
-                echo "Invalid option: -$OPTARG"
-                exit 1
-                ;;
-        esac
-    done
+
 
 # 默认状态下镜像存放在下面的地址(郭老师的服务器上都有);所以在服务器之外的地方使用，需要自己拷贝镜像文件。
 RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_rstudio_latest.sif"
