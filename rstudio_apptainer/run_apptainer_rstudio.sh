@@ -67,7 +67,7 @@ fi
 
 
 # 默认状态下镜像存放在下面的地址(郭老师的服务器上都有);所以在服务器之外的地方使用，需要自己拷贝镜像文件。
-RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_rstudio_latest.sif"
+RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_rstudio_latest"
 # RSTUDIO_SIF="/***/rstudio_latest.sif" # 镜像的地址,可自己修改
 
 RSTUDIO_TMP=`pwd`/tmp_${PORT}
