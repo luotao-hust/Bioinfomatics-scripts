@@ -27,7 +27,7 @@ basedir=`cd $(dirname $0); pwd -P`
 mkdir -p "/home/$(id -un)/.config/jupyterlab_apptainer/"
 
 export NEW_STARTSCRIPT="/home/$(id -un)/.config/jupyterlab_apptainer/run_apptainer_jupyterlab_latest.sh"
-export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/jupyterlab_apptainer/run_apptainer_jupyterlab.sh"
+export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/jupyterlab_apptainer/run_apptainer_jupyterlab_beta.sh"
 
 wget -q --timeout=6 --tries=2 ${NEW_STARTSCRIPT_PATH} -O ${NEW_STARTSCRIPT}
 NEW_VERSION=`sed -n '2p' ${NEW_STARTSCRIPT} | awk -F "=" '{print $2}'`
