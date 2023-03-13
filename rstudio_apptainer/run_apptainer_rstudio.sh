@@ -20,6 +20,32 @@ while getopts ":b:p:" arg;
         esac
     done
 
+# PASSWD CHECK
+PASSWORD_FILE="/home/${APPTAINERENV_USER}/.config/rstudio_apptainer/passwd"
+if [ -f "$PASSWORD_FILE" ]; then
+    export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
+else
+   
+	while true
+		do
+			read  -s  -p "Please input an new password for rstudio server: " passwd_input
+			echo
+			read  -s  -p "Verify password: " passwd_va
+			echo
+			if [[ ${passwd_va} == ${passwd_input} ]]; 
+			then
+				break
+			else
+				echo -e "\e[31mWarning: \e[0m The passwords do not match!"
+				sleep 3
+			fi
+		done
+	password=`echo -n ${passwd_input} | openssl dgst -sha256`
+	password=${password: -64}
+	echo ${password} > ${PASSWORD_FILE}
+	echo
+	export APPTAINERENV_PASSWORD=${password}
+fi
 # 用于检测更新
 FileName=$(basename $0)
 basedir=`cd $(dirname $0); pwd -P`
@@ -105,31 +131,5 @@ END
 
 export APPTAINER_BIND="${RSTUDIO_TMP}/run:/run,${RSTUDIO_TMP}/tmp:/tmp,${RSTUDIO_TMP}/database.conf:/etc/rstudio/database.conf,${RSTUDIO_TMP}/rsession.conf:/etc/rstudio/rsession.conf,${RSTUDIO_TMP}/var/lib/rstudio-server:/var/lib/rstudio-server,${RSTUDIO_TMP}/.cache:/home/${APPTAINERENV_USER}/.cache,${RSTUDIO_TMP}/.config:/home/${APPTAINERENV_USER}/.config,${RSTUDIO_TMP}/.local/:/home/${APPTAINERENV_USER}/.local,$EXBIND"
 
-# PASSWD CHECK
-PASSWORD_FILE="/home/${APPTAINERENV_USER}/.config/rstudio_apptainer/passwd"
-if [ -f "$PASSWORD_FILE" ]; then
-    export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
-else
-   
-	while true
-		do
-			read  -s  -p "Please input an new password for rstudio server: " passwd_input
-			echo
-			read  -s  -p "Verify password: " passwd_va
-			echo
-			if [[ ${passwd_va} == ${passwd_input} ]]; 
-			then
-				break
-			else
-				echo -e "\e[31mWarning: \e[0m The passwords do not match!"
-				sleep 3
-			fi
-		done
-	password=`echo -n ${passwd_input} | openssl dgst -sha256`
-	password=${password: -64}
-	echo ${password} > ${PASSWORD_FILE}
-	echo
-	export APPTAINERENV_PASSWORD=${password}
-fi
 
 apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
