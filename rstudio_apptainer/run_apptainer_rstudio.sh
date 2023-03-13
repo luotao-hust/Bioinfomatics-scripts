@@ -26,7 +26,7 @@ PASSWORD_FILE="/home/$(id -un)/.config/rstudio_apptainer/passwd"
 if [ -f "$PASSWORD_FILE" ]; then
     export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
 else
-   touch ${PASSWORD_FILE}
+   
 	while true
 		do
 			read  -s  -p "Please input an new password for rstudio server: " passwd_input
@@ -43,6 +43,7 @@ else
 		done
 	password=`echo -n ${passwd_input} | openssl dgst -sha256`
 	password=${password: -64}
+	touch ${PASSWORD_FILE}
 	echo ${password} > ${PASSWORD_FILE}
 	echo
 	export APPTAINERENV_PASSWORD=${password}
