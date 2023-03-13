@@ -22,7 +22,7 @@ while getopts ":b:p:" arg;
 
 mkdir -p "/home/$(id -un)/.config/rstudio_apptainer"
 # PASSWD CHECK
-PASSWORD_FILE="/home/${APPTAINERENV_USER}/.config/rstudio_apptainer/passwd"
+PASSWORD_FILE="/home/$(id -un)/.config/rstudio_apptainer/passwd"
 if [ -f "$PASSWORD_FILE" ]; then
     export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
 else
