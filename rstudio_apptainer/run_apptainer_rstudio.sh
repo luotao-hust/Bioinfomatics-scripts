@@ -20,12 +20,13 @@ while getopts ":b:p:" arg;
         esac
     done
 
+mkdir -p "/home/$(id -un)/.config/rstudio_apptainer"
 # PASSWD CHECK
 PASSWORD_FILE="/home/${APPTAINERENV_USER}/.config/rstudio_apptainer/passwd"
 if [ -f "$PASSWORD_FILE" ]; then
     export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
 else
-   
+   touch ${PASSWORD_FILE}
 	while true
 		do
 			read  -s  -p "Please input an new password for rstudio server: " passwd_input
@@ -49,7 +50,7 @@ fi
 # 用于检测更新
 FileName=$(basename $0)
 basedir=`cd $(dirname $0); pwd -P`
-mkdir -p "/home/$(id -un)/.config/rstudio_apptainer"
+
 
 export NEW_STARTSCRIPT="/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
 export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/rstudio_apptainer/run_apptainer_rstudio.sh"
