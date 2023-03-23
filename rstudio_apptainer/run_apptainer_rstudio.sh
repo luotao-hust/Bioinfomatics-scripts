@@ -1,5 +1,5 @@
 #!/bin/bash
-# VERSION=1.0.2
+# VERSION=1.0.3
 export TOP_PID=$$
 trap 'exit 1' TERM
 
@@ -74,9 +74,7 @@ if [[ "$(printf '%s\n' "${CURRENT_VERSION}" "${NEW_VERSION}" | sort -rV | head -
                     mv ${basedir}/${FileName} "/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_bk.sh"
                     cp ${NEW_STARTSCRIPT} ${basedir}/${FileName}
 		    chmod 755 ${basedir}/${FileName}
-		    bash ${basedir}/${FileName} -p ${PORT} -b ${RAW_BIND}
-                    echo -e "\033[34mINFO:\033[0m  Finishing script update."
-                    kill -s TERM $TOP_PID
+                    echo -e "\033[34mINFO:\033[0m  Finishing script update. Please restart!"
                     ;;
 
                 [nN][oO]|[nN])
