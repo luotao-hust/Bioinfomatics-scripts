@@ -105,7 +105,7 @@ RSTUDIO_SIF=${basedir}/apptainer_jupyterlab_rstudio-server/
 # RSTUDIO_SIF="/***/rstudio_latest.sif" # 镜像的地址,可自己修改
 
 if [ -d "${RSTUDIO_SIF}" ];then
-    ;;
+    :
     else        
         echo -e "\033[34mINFO:\033[0m Extracting files.........."
         apptainer build --sandbox ${RSTUDIO_SIF} ${OR_RSTUDIO_SIF}
