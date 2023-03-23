@@ -95,9 +95,24 @@ fi
 
 
 
+
+
+# 用于检测镜像更新 
+
 # 默认状态下镜像存放在下面的地址(郭老师的服务器上都有);所以在服务器之外的地方使用，需要自己拷贝镜像文件。
-RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
+OR_RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
+RSTUDIO_SIF=${basedir}/apptainer_jupyterlab_rstudio-server/
 # RSTUDIO_SIF="/***/rstudio_latest.sif" # 镜像的地址,可自己修改
+
+if [ -d "${RSTUDIO_SIF}" ];then
+    ;;
+    else        
+        echo -e "\033[34mINFO:\033[0m Extracting files.........."
+        apptainer build --sandbox ${RSTUDIO_SIF} ${OR_RSTUDIO_SIF}
+fi
+
+###################################################################################################
+
 
 RSTUDIO_TMP=`pwd`/tmp_${PORT}
 SERVER_IP=$(python -c "import socket;print([(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1])")
