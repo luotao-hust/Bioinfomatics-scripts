@@ -1,5 +1,5 @@
 #!/bin/bash
-# VERSION=1.0.0
+# VERSION=1.0.1
 
 export TOP_PID=$$
 trap 'exit 1' TERM
@@ -52,8 +52,18 @@ JUPYTERLAB_TMP=${basedir}/tmp_${PORT}
 mkdir -p -m 700 ${JUPYTERLAB_TMP}/run ${JUPYTERLAB_TMP}/tmp
 
 # 默认状态下镜像存放在下面的地址(郭老师的服务器上都有);所以在服务器之外的地方使用，需要自己拷贝镜像文件。
-RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
+OR_RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
+RSTUDIO_SIF=${basedir}/apptainer_jupyterlab_rstudio-server/
 # RSTUDIO_SIF="/***/rstudio_latest.sif" # 镜像的地址,可自己修改
+
+if [ -d "${RSTUDIO_SIF}" ];then
+    ;;
+    else        
+        echo -e "\033[34mINFO:\033[0m Extracting files.........."
+        apptainer build --sandbox ${RSTUDIO_SIF} ${OR_RSTUDIO_SIF}
+fi
+
+
 
 export APPTAINER_BIND="${JUPYTERLAB_TMP}/run:/run,${JUPYTERLAB_TMP}/tmp:/tmp,$EXBIND"
 
