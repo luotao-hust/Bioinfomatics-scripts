@@ -1,5 +1,5 @@
 #!/bin/bash
-# VERSION=1.0.3
+# VERSION=1.0.4
 export TOP_PID=$$
 trap 'exit 1' TERM
 
