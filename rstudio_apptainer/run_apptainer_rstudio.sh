@@ -56,7 +56,7 @@ basedir=`cd $(dirname $0); pwd -P`
 export NEW_STARTSCRIPT="/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
 export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/rstudio_apptainer/run_apptainer_rstudio.sh"
 
-wget -q --timeout=6 --tries=2 ${NEW_STARTSCRIPT_PATH} -O ${NEW_STARTSCRIPT}
+wget -4 -q --timeout=6 --tries=2 ${NEW_STARTSCRIPT_PATH} -O ${NEW_STARTSCRIPT}
 NEW_VERSION=`sed -n '2p' ${NEW_STARTSCRIPT} | awk -F "=" '{print $2}'`
 CURRENT_VERSION=`sed -n '2p' "${basedir}/${FileName}" | awk -F "=" '{print $2}'`
 
