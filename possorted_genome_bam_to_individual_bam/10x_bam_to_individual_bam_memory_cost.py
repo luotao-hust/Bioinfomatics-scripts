@@ -70,7 +70,7 @@ if __name__ == "__main__":
 # 可能需要安装 pysam pandas 等包  pip 安装
 # 脚本接受三个参数   第一个是 bam 文件的绝对路径   第二个是 需要拆分的 barcode 列表   第三个是 输出文件夹
 # 运行方式 这个前缀是必须的 ulimit -HSn 1024000
-# ulimit -HSn 1024000 && python split_bc_bam_memory_cost.py possorted_genome_bam.bam barcode_list_20220413.txt mapping_rates 
+# ulimit -HSn 1024000 && python split_bc_bam_memory_cost.py --bam possorted_genome_bam.bam --list barcode_list_20220413.txt --out mapping_rates 
 
 # 后台方式
-# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py python split_bc_bam_memory_cost.py possorted_genome_bam.bam barcode_list_20220413.txt mapping_rates > split.log 2>&1 &
+# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py python split_bc_bam_memory_cost.py --bam possorted_genome_bam.bam --list barcode_list_20220413.txt --out mapping_rates  > split.log 2>&1 &
