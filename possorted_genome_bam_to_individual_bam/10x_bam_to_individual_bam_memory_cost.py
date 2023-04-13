@@ -38,7 +38,10 @@ def main(input_bam,barcodes_file,output_dir):
 	samfile = pysam.AlignmentFile(input_bam, "rb")
 	for read in samfile:
 		progress.update(1)
-		if (not read.is_unmapped) and (not read.is_secondary) and (not read.is_duplicate):  # get only primary mapped reads.
+		if len(barcode_list) == len(barcode_dict.keys()):
+			break
+		# if (not read.is_unmapped) and (not read.is_secondary) and (not read.is_duplicate):  # get only primary mapped reads.
+		if (not read.is_unmapped):
 			try:
 				CB_itr = read.get_tag('CB')
 			except:
@@ -63,4 +66,10 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	main(input_bam=args.bam,barcodes_file=args.list,output_dir=args.out)
 
-# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py /workspace/luot/data/EV_data/data/cellranger_out/100K5M/outs/possorted_genome_bam.bam /workspace/luot/EV/QC/mapping_rates/K562_100_EV_barcode_list_cb2_20220413.txt /workspace/luot/EV/QC/mapping_rates/K562_100_EV > K562_100_bam_split.log 2>&1 &
+# 使用说明
+# 脚本接受三个参数   第一个是 bam 文件的绝对路径   第二个是 需要拆分的 barcode 列表   第三个是 输出文件夹
+# 运行方式 这个前缀是必须的 ulimit -HSn 1024000
+# ulimit -HSn 1024000 && python split_bc_bam_memory_cost.py possorted_genome_bam.bam barcode_list_20220413.txt mapping_rates 
+
+# 后台方式
+# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py python split_bc_bam_memory_cost.py possorted_genome_bam.bam barcode_list_20220413.txt mapping_rates > split.log 2>&1 &
