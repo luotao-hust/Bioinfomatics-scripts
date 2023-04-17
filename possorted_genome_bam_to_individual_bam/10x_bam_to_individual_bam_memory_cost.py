@@ -38,8 +38,6 @@ def main(input_bam,barcodes_file,output_dir):
 	samfile = pysam.AlignmentFile(input_bam, "rb")
 	for read in samfile:
 		progress.update(1)
-		if len(barcode_list) == len(barcode_dict.keys()):
-			break
 		# if (not read.is_unmapped) and (not read.is_secondary) and (not read.is_duplicate):  # get only primary mapped reads.
 		if (not read.is_unmapped):
 			try:
