@@ -73,4 +73,4 @@ if __name__ == "__main__":
 # ulimit -HSn 1024000 && python split_bc_bam_memory_cost.py --bam possorted_genome_bam.bam --list barcode_list_20220413.txt --out mapping_rates 
 
 # 后台方式
-# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py python split_bc_bam_memory_cost.py --bam possorted_genome_bam.bam --list barcode_list_20220413.txt --out mapping_rates  > split.log 2>&1 &
+# ulimit -HSn 1024000 && nohup python split_bc_bam_memory_cost.py --bam possorted_genome_bam.bam --list barcode_list_20220413.txt --out mapping_rates  > split.log 2>&1 &
