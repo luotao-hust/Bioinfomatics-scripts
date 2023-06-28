@@ -20,9 +20,9 @@ while getopts ":b:p:" arg;
         esac
     done
 
-mkdir -p "/home/$(id -un)/.config/rstudio_apptainer"
+mkdir -p "$HOME/$(id -un)/.config/rstudio_apptainer"
 # PASSWD CHECK
-PASSWORD_FILE="/home/$(id -un)/.config/rstudio_apptainer/passwd"
+PASSWORD_FILE="$HOME/$(id -un)/.config/rstudio_apptainer/passwd"
 if [ -f "$PASSWORD_FILE" ]; then
     export APPTAINERENV_PASSWORD=`cat ${PASSWORD_FILE}`
 else
@@ -48,12 +48,12 @@ else
 	echo
 	export APPTAINERENV_PASSWORD=${password}
 fi
-# 用于检测更新
 FileName=$(basename $0)
 basedir=`cd $(dirname $0); pwd -P`
 
+# 用于检测更新
 
-export NEW_STARTSCRIPT="/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
+export NEW_STARTSCRIPT="$HOME/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_latest.sh"
 export NEW_STARTSCRIPT_PATH="https://raw.githubusercontent.com/luotao-hust/Bioinfomatics-scripts/main/rstudio_apptainer/run_apptainer_rstudio.sh"
 
 wget -4 -q --timeout=6 --tries=2 ${NEW_STARTSCRIPT_PATH} -O ${NEW_STARTSCRIPT}
@@ -71,7 +71,7 @@ if [[ "$(printf '%s\n' "${CURRENT_VERSION}" "${NEW_VERSION}" | sort -rV | head -
             read -r -p "Current version = ${CURRENT_VERSION} , new version = ${NEW_VERSION}; Do you want to update it (y/n)? " input
             case $input in
                 [yY][eE][sS]|[yY])
-                    mv ${basedir}/${FileName} "/home/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_bk.sh"
+                    mv ${basedir}/${FileName} "$HOME/$(id -un)/.config/rstudio_apptainer/run_apptainer_rstudio_bk.sh"
                     cp ${NEW_STARTSCRIPT} ${basedir}/${FileName}
 		    chmod 755 ${basedir}/${FileName}
                     echo -e "\033[34mINFO:\033[0m  Finishing script update. Please restart!"
@@ -91,14 +91,9 @@ fi
 
 # 用于检测更新
 
-
-
-
-
 # 用于检测镜像更新 
-
 # 默认状态下镜像存放在下面的地址(郭老师的服务器上都有);所以在服务器之外的地方使用，需要自己拷贝镜像文件。
-OR_RSTUDIO_SIF="/home/luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
+OR_RSTUDIO_SIF="$HOME../luot/software/apptainer_rstudio/apptainer_jupyterlab_rstudio-server.sif"
 RSTUDIO_SIF=${basedir}/apptainer_jupyterlab_rstudio-server/
 # RSTUDIO_SIF="/***/rstudio_latest.sif" # 镜像的地址,可自己修改
 
@@ -144,7 +139,7 @@ cat > ${RSTUDIO_TMP}/rsession.conf <<END
 # R Session Configuration File
 END
 
-export APPTAINER_BIND="${RSTUDIO_TMP}/run:/run,${RSTUDIO_TMP}/tmp:/tmp,${RSTUDIO_TMP}/database.conf:/etc/rstudio/database.conf,${RSTUDIO_TMP}/rsession.conf:/etc/rstudio/rsession.conf,${RSTUDIO_TMP}/var/lib/rstudio-server:/var/lib/rstudio-server,${RSTUDIO_TMP}/.cache:/home/${APPTAINERENV_USER}/.cache,${RSTUDIO_TMP}/.config:/home/${APPTAINERENV_USER}/.config,${RSTUDIO_TMP}/.local/:/home/${APPTAINERENV_USER}/.local,$EXBIND"
+export APPTAINER_BIND="${RSTUDIO_TMP}/run:/run,${RSTUDIO_TMP}/tmp:/tmp,${RSTUDIO_TMP}/database.conf:/etc/rstudio/database.conf,${RSTUDIO_TMP}/rsession.conf:/etc/rstudio/rsession.conf,${RSTUDIO_TMP}/var/lib/rstudio-server:/var/lib/rstudio-server,${RSTUDIO_TMP}/.cache:$HOME/${APPTAINERENV_USER}/.cache,${RSTUDIO_TMP}/.config:$HOME/${APPTAINERENV_USER}/.config,${RSTUDIO_TMP}/.local/:$HOME/${APPTAINERENV_USER}/.local,$EXBIND"
 
 
 apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
