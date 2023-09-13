@@ -101,7 +101,7 @@ if [ -d "${RSTUDIO_SIF}" ];then
     :
     else        
         echo -e "\033[34mINFO:\033[0m Extracting files.........."
-        apptainer build --sandbox ${RSTUDIO_SIF} ${OR_RSTUDIO_SIF}
+        apptainer build --sandbox --writable-tmpfs ${RSTUDIO_SIF} ${OR_RSTUDIO_SIF}
 fi
 
 ###################################################################################################
@@ -142,4 +142,4 @@ END
 export APPTAINER_BIND="${RSTUDIO_TMP}/run:/run,${RSTUDIO_TMP}/tmp:/tmp,${RSTUDIO_TMP}/database.conf:/etc/rstudio/database.conf,${RSTUDIO_TMP}/rsession.conf:/etc/rstudio/rsession.conf,${RSTUDIO_TMP}/var/lib/rstudio-server:/var/lib/rstudio-server,${RSTUDIO_TMP}/.cache:$HOME/${APPTAINERENV_USER}/.cache,${RSTUDIO_TMP}/.config:$HOME/${APPTAINERENV_USER}/.config,${RSTUDIO_TMP}/.local/:$HOME/${APPTAINERENV_USER}/.local,$EXBIND"
 
 
-apptainer instance start ${RSTUDIO_SIF} rstudio_${PORT}
+apptainer instance start --writable ${RSTUDIO_SIF} rstudio_${PORT}
