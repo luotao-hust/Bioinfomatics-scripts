@@ -92,7 +92,7 @@ rule featureCounts:
         tmpdir=config["output_directory"]
     shell:
         """
-        featureCounts -a {config[resources][gtf]} -o {output[0]} -T {threads} -p -t exon -g gene_id {input[0]} && python ./count_to_tpm.py -f {output[0]} 2> {log}
+        featureCounts -a {config[resources][gtf]} -o {output[0]} -T {threads} -p --countReadPairs -t exon -g gene_id {input[0]} && python ./count_to_tpm.py -f {output[0]} 2> {log}
         """
 
 rule fastqc:
